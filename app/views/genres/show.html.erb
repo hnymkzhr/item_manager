@@ -1,0 +1,11 @@
+<h1>Genre: <%= @genre.name %> のカテゴリ一覧</h1>
+<ul>
+  <% @genre.categories.each do |category| %>
+    <li>
+      <%= link_to category.name, genre_category_path(@genre, category) %>
+    </li>
+  <% end %>
+</ul>
+<%= link_to 'New Category', new_genre_category_path(@genre) %>
+<%= link_to 'Edit', edit_genre_path(@genre) %> |
+<%= link_to 'Back to Genres', genres_path %>

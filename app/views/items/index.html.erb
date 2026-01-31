@@ -1,0 +1,12 @@
+<h1><%= @genre.name %> - <%= @category.name %> - Items</h1>
+
+<ul>
+  <% @items.each do |item| %>
+    <li>
+      <%= link_to item.name, genre_category_item_path(@genre, @category, item) %>
+    </li>
+  <% end %>
+</ul>
+
+<%= link_to 'New Item', new_genre_category_item_path(@genre, @category) %>
+<%= link_to 'Back to Category', genre_category_path(@genre, @category) %>
