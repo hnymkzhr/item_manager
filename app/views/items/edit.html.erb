@@ -1,4 +1,4 @@
-<h1>New Item for <%= @category.name %></h1>
+<h1>Editing Item</h1>
 
 <%= form_with(model: [@genre, @category, @item]) do |form| %>
   <% if @item.errors.any? %>
@@ -33,4 +33,5 @@
   </div>
 <% end %>
 
+<%= link_to 'Show', genre_category_item_path(@genre, @category, @item) %> |
 <%= link_to 'Back to Items', genre_category_items_path(@genre, @category) %>
