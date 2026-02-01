@@ -55,8 +55,13 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+
 production:
   <<: *default
-  database: item_manager_production
-  username: item_manager
-  password: <%= ENV["ITEM_MANAGER_DATABASE_PASSWORD"] %>
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV['DATABASE_URL'] %>
+  # For details on connection pooling, see rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  

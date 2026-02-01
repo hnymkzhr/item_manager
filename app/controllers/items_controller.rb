@@ -1,13 +1,10 @@
 class ItemsController < ApplicationController
   before_action :set_genre
   before_action :set_category
-  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :set_item, only: [:edit, :update, :destroy]
 
   def index
     @items = @category.items
-  end
-
-  def show
   end
 
   def new
@@ -17,7 +14,7 @@ class ItemsController < ApplicationController
   def create
     @item = @category.items.build(item_params)
     if @item.save
-      redirect_to [@genre, @category, @item], notice: 'Item was successfully created.'
+      redirect_to genre_category_items_path(@genre, @category), notice: 'アイテムが正常に作成されました。'
     else
       render :new
     end
@@ -28,7 +25,7 @@ class ItemsController < ApplicationController
 
   def update
     if @item.update(item_params)
-      redirect_to [@genre, @category, @item], notice: 'Item was successfully updated.'
+      redirect_to genre_category_items_path(@genre, @category), notice: 'アイテムが正常に更新されました。'
     else
       render :edit
     end
@@ -36,7 +33,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item.destroy
-    redirect_to genre_category_items_url(@genre, @category), notice: 'Item was successfully destroyed.'
+    redirect_to genre_category_items_url(@genre, @category), notice: 'アイテムが正常に削除されました。'
   end
 
   private

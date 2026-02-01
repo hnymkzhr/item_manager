@@ -1,12 +1,11 @@
-<h1><%= @genre.name %> - Categories</h1>
+<h1>全カテゴリー</h1>
 
 <ul>
   <% @categories.each do |category| %>
     <li>
-      <%= link_to category.name, genre_category_path(@genre, category) %>
+      <%= category.name %> (ジャンル: <%= category.genre.name %>)
     </li>
   <% end %>
 </ul>
 
-<%= link_to 'New Category', new_genre_category_path(@genre) %>
-<%= link_to 'Back to Genre', @genre %>
+<%= link_to '戻る', genres_path %>

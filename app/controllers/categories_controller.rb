@@ -3,13 +3,12 @@ class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :edit, :update, :destroy]
 
   def index
-    @categories = @genre.categories
-  end
-
-  def show
-    @genre = Genre.find(params[:genre_id])
-    @category = @genre.categories.find(params[:id])
-    @items = @category.items
+    if params[:genre_id]
+      @genre = Genre.find(params[:genre_id])
+      @categories = @genre.categories
+    else
+      @categories = Category.all.includes(:genre)
+    end
   end
 
   def new
@@ -19,7 +18,7 @@ class CategoriesController < ApplicationController
   def create
     @category = @genre.categories.build(category_params)
     if @category.save
-      redirect_to [@genre, @category], notice: 'Category was successfully created.'
+      redirect_to genre_categories_path(@genre), notice: 'カテゴリーが正常に作成されました。'
     else
       render :new
     end
@@ -30,7 +29,7 @@ class CategoriesController < ApplicationController
 
   def update
     if @category.update(category_params)
-      redirect_to [@genre, @category], notice: 'Category was successfully updated.'
+      redirect_to genre_categories_path(@genre), notice: 'カテゴリーが正常に更新されました。'
     else
       render :edit
     end
@@ -38,13 +37,13 @@ class CategoriesController < ApplicationController
 
   def destroy
     @category.destroy
-    redirect_to genre_categories_url(@genre), notice: 'Category was successfully destroyed.'
+    redirect_to genre_categories_url(@genre), notice: 'カテゴリーが正常に削除されました。'
   end
 
   private
 
   def set_genre
-    @genre = Genre.find(params[:genre_id])
+    @genre = Genre.find(params[:genre_id]) if params[:genre_id]
   end
 
   def set_category

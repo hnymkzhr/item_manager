@@ -5,19 +5,24 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-
-kaden = Genre.create(name: '家電')
-kagu  = Genre.create(name: '家具')
-
-Category.create([
-  { name: '冷蔵庫', genre: kaden },
-  { name: '洗濯機', genre: kaden },
-  { name: 'デスク', genre: kagu }
-])
-
-category = Category.find_by(name: 'デスク')
-category.items.create(name: "オフィスデスク", price: 20000)
-category.items.create(name: "パソコンデスク", price: 15000)
-category = Category.find_by(name: '冷蔵庫')
-category.items.create(name: "クールフリーザー", price: 80000) 
-category.items.create(name: "ひえひえプラス", price: 50000)
+Genre.destroy_all
+Category.destroy_all
+Item.destroy_all
+genres = Genre.create!([{name: 'Books'}, {name: 'Electronics'}, {name: 'Clothing'}])
+categories = []
+items = []
+genres.each do |genre|
+  3.times do |i|
+    category = genre.categories.create!(name: "#{genre.name} Category #{i + 1}")
+    categories << category
+    5.times do |j|
+      item = category.items.create!(
+        name: "#{category.name} Item #{j + 1}",
+        description: "Description for #{category.name} Item #{j + 1}",
+        price: (j + 1) * 1000
+      )
+      items << item
+    end
+  end
+end
+puts "Seeded #{Genre.count} genres, #{Category.count} categories, and #{Item.count} items."

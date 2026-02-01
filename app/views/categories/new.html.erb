@@ -1,9 +1,9 @@
-<h1>New Category for <%= @genre.name %></h1>
+<h1><%= @genre.name %> の新しいカテゴリー</h1>
 
 <%= form_with(model: [@genre, @category]) do |form| %>
   <% if @category.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@category.errors.count, "error") %> prohibited this category from being saved:</h2>
+      <h2><%= pluralize(@category.errors.count, "エラー") %>により、このカテゴリーを保存できませんでした:</h2>
 
       <ul>
         <% @category.errors.each do |error| %>
@@ -14,13 +14,13 @@
   <% end %>
 
   <div>
-    <%= form.label :name %>
+    <%= form.label :name, "名前" %>
     <%= form.text_field :name %>
   </div>
 
   <div>
-    <%= form.submit %>
+    <%= form.submit "作成" %>
   </div>
 <% end %>
 
-<%= link_to 'Back', genre_categories_path(@genre) %>
+<%= link_to '戻る', genre_categories_path(@genre) %>

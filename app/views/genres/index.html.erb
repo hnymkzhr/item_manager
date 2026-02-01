@@ -1,11 +1,107 @@
-<h1>Genres</h1>
+<h1>アイテム管理</h1>
 
-<ul>
-  <% @genres.each do |genre| %>
-    <li>
-      <%= link_to genre.name, genre_path(genre) %>
-    </li>
+<details>
+  <summary>新しいジャンルを作成</summary>
+  <%= form_with(model: Genre.new) do |form| %>
+    <% if @genre&.errors&.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@genre.errors.count, "エラー") %>により、このジャンルを保存できませんでした:</h2>
+        <ul>
+          <% @genre.errors.each do |error| %>
+            <li><%= error.full_message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div>
+      <%= form.label :name, "名前" %>
+      <%= form.text_field :name %>
+    </div>
+    <div>
+      <%= form.submit "作成" %>
+    </div>
   <% end %>
-</ul>
+</details>
 
-<%= link_to 'New Genre', new_genre_path %>
+<% @genres.each do |genre| %>
+  <h2>ジャンル: <%= genre.name %></h2>
+  <%= link_to '編集', edit_genre_path(genre) %> |
+  <%= button_to '削除', genre_path(genre), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger' %>
+
+  <details>
+    <summary>新しいカテゴリーを作成</summary>
+    <%= form_with(model: genre.categories.build) do |form| %>
+      <% if form.object.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(form.object.errors.count, "エラー") %>により、このカテゴリーを保存できませんでした:</h2>
+          <ul>
+            <% form.object.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <div>
+        <%= form.label :name, "名前" %>
+        <%= form.text_field :name %>
+      </div>
+      <div>
+        <%= form.submit "作成" %>
+      </div>
+    <% end %>
+  </details>
+
+  <% genre.categories.each do |category| %>
+    <% next unless category.persisted? %>
+    <details>
+      <summary>カテゴリー: <%= category.name %></summary>
+      <% if category.persisted? %>
+        <%= link_to '編集', edit_genre_category_path(genre, category) %> |
+        <%= button_to '削除', genre_category_path(genre, category), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger' %>
+      <% end %>
+
+      <details>
+        <summary>新しいアイテムを作成</summary>
+        <%= form_with(model: category.items.build, url: genre_category_items_path(genre, category)) do |form| %>
+          <% if form.object.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(form.object.errors.count, "エラー") %>により、このアイテムを保存できませんでした:</h2>
+              <ul>
+                <% form.object.errors.each do |error| %>
+                  <li><%= error.full_message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <div>
+            <%= form.label :name, "名前" %>
+            <%= form.text_field :name %>
+          </div>
+          <div>
+            <%= form.label :description, "説明" %>
+            <%= form.text_area :description %>
+          </div>
+          <div>
+            <%= form.label :price, "価格" %>
+            <%= form.number_field :price %>
+          </div>
+          <div>
+            <%= form.submit "作成" %>
+          </div>
+        <% end %>
+      </details>
+
+      <% category.items.each do |item| %>
+        <% next unless item.persisted? %>
+        <details>
+          <summary><%= item.name %></summary>
+          <p><%= item.description %> - 価格: <%= item.price %></p>
+          <% if item.persisted? %>
+            <%= link_to '編集', edit_genre_category_item_path(genre, category, item) %> |
+            <%= button_to '削除', genre_category_item_path(genre, category, item), method: :delete, data: { confirm: '本当に削除しますか？' }, class: 'btn btn-danger' %>
+          <% end %>
+        </details>
+      <% end %>
+    </details>
+  <% end %>
+<% end %>

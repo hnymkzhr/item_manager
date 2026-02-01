@@ -1,12 +1,8 @@
 class GenresController < ApplicationController
-  before_action :set_genre, only: [:show, :edit, :update, :destroy]
+  before_action :set_genre, only: [:edit, :update, :destroy]
 
   def index
-    @genres = Genre.all
-  end
-
-  def show
-    @genre = Genre.find(params[:id])
+    @genres = Genre.includes(categories: :items)
   end
 
   def new
@@ -16,7 +12,7 @@ class GenresController < ApplicationController
   def create
     @genre = Genre.new(genre_params)
     if @genre.save
-      redirect_to @genre, notice: 'Genre was successfully created.'
+      redirect_to genres_path, notice: 'ジャンルが正常に作成されました。'
     else
       render :new
     end
@@ -27,7 +23,7 @@ class GenresController < ApplicationController
 
   def update
     if @genre.update(genre_params)
-      redirect_to @genre, notice: 'Genre was successfully updated.'
+      redirect_to genres_path, notice: 'ジャンルが正常に更新されました。'
     else
       render :edit
     end
@@ -35,7 +31,7 @@ class GenresController < ApplicationController
 
   def destroy
     @genre.destroy
-    redirect_to genres_url, notice: 'Genre was successfully destroyed.'
+    redirect_to genres_url, notice: 'ジャンルが正常に削除されました。'
   end
 
   private
