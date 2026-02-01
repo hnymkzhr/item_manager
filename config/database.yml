@@ -21,12 +21,12 @@ test:
   database: db/test.sqlite3
 
 # Store uploaded files on the local file system (see config/storage.yml for options).
-# production:
-#   <<: *default
-#   database: db/production.sqlite3
-  #   log, notice, warning, error, fatal, and panic
-  # Defaults to warning.
-  #min_messages: notice
+production:
+  <<: *default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV['DATABASE_URL'] %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
